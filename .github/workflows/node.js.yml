@@ -10,11 +10,12 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
-    strategy:
-      matrix:
-        node-version: [22.x]
+   strategy:
+    matrix:
+      os: [ubuntu-latest, windows-latest, macos-latest]
+      node-version: [22.x]
 
     defaults:
       run:
