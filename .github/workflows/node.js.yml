@@ -10,12 +10,7 @@ on:
 
 jobs:
   build:
-    runs-on: ${{ matrix.os }}
-
-   strategy:
-    matrix:
-      os: [ubuntu-latest, windows-latest, macos-latest]
-      node-version: [22.x]
+    runs-on: ubuntu-latest
 
     defaults:
       run:
@@ -28,7 +23,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version: 22.x
           cache: npm
           cache-dependency-path: app/package-lock.json
 
@@ -40,3 +35,13 @@ jobs:
 
       - name: Run tests
         run: npm test --if-present
+
+      - name: Build and Push Docker Image
+        uses: mr-smithers-excellent/docker-build-push@v4
+        with:
+          image: YOUR_DOCKER_USERNAME/docker-beginner
+          registry: docker.io
+          dockerfile: Dockerfile
+          directory: .
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
